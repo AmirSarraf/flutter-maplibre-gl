@@ -59,6 +59,7 @@ class MaplibreMapController extends ChangeNotifier {
     this.onMapIdle,
     this.onUserLocationUpdated,
     this.onCameraIdle,
+    this.iconSizeOptions,
   }) : _mapboxGlPlatform = mapboxGlPlatform {
     _cameraPosition = initialCameraPosition;
 
@@ -122,7 +123,9 @@ class MaplibreMapController extends ChangeNotifier {
             break;
           case AnnotationType.symbol:
             symbolManager = SymbolManager(this,
-                onTap: onSymbolTapped, enableInteraction: enableInteraction);
+                onTap: onSymbolTapped,
+                enableInteraction: enableInteraction,
+                iconSizeOptions: iconSizeOptions);
             break;
           default:
         }
@@ -183,6 +186,8 @@ class MaplibreMapController extends ChangeNotifier {
   final OnCameraIdleCallback? onCameraIdle;
 
   final OnMapIdleCallback? onMapIdle;
+
+  final Map<String, dynamic>? iconSizeOptions;
 
   /// Callbacks to receive tap events for symbols placed on this map.
   final ArgumentCallbacks<Symbol> onSymbolTapped = ArgumentCallbacks<Symbol>();

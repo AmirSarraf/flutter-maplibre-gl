@@ -246,15 +246,15 @@ class CircleManager extends AnnotationManager<Circle> {
 }
 
 class SymbolManager extends AnnotationManager<Symbol> {
-  SymbolManager(
-    MaplibreMapController controller, {
-    void Function(Symbol)? onTap,
-    bool iconAllowOverlap = false,
-    bool textAllowOverlap = false,
-    bool iconIgnorePlacement = false,
-    bool textIgnorePlacement = false,
-    bool enableInteraction = true,
-  })  : _iconAllowOverlap = iconAllowOverlap,
+  SymbolManager(MaplibreMapController controller,
+      {void Function(Symbol)? onTap,
+      bool iconAllowOverlap = false,
+      bool textAllowOverlap = false,
+      bool iconIgnorePlacement = false,
+      bool textIgnorePlacement = false,
+      bool enableInteraction = true,
+      this.iconSizeOptions})
+      : _iconAllowOverlap = iconAllowOverlap,
         _textAllowOverlap = textAllowOverlap,
         _iconIgnorePlacement = iconIgnorePlacement,
         _textIgnorePlacement = textIgnorePlacement,
@@ -268,6 +268,7 @@ class SymbolManager extends AnnotationManager<Symbol> {
   bool _textAllowOverlap;
   bool _iconIgnorePlacement;
   bool _textIgnorePlacement;
+  final Map<String, dynamic>? iconSizeOptions;
 
   /// For more information on what this does, see https://docs.mapbox.com/help/troubleshooting/optimize-map-label-placement/#label-collision
   Future<void> setIconAllowOverlap(bool value) async {
@@ -296,7 +297,17 @@ class SymbolManager extends AnnotationManager<Symbol> {
   @override
   List<LayerProperties> get allLayerProperties => [
         SymbolLayerProperties(
-          iconSize: [Expressions.get, 'iconSize'],
+          iconSize: (iconSizeOptions == null)
+              ? [Expressions.get, 'iconSize']
+              : [
+                  iconSizeOptions!['method'] ?? 'interpolate',
+                  [iconSizeOptions!['type'] ?? 'linear'],
+                  [Expressions.zoom],
+                  iconSizeOptions!['minZoom'],
+                  iconSizeOptions!['minSize'],
+                  iconSizeOptions!['maxZoom'],
+                  iconSizeOptions!['maxSize']
+                ],
           iconImage: [Expressions.get, 'iconImage'],
           iconRotate: [Expressions.get, 'iconRotate'],
           iconOffset: [Expressions.get, 'iconOffset'],

@@ -9,51 +9,52 @@ enum AnnotationType { fill, line, circle, symbol }
 typedef void MapCreatedCallback(MaplibreMapController controller);
 
 class MaplibreMap extends StatefulWidget {
-  const MaplibreMap({
-    Key? key,
-    required this.initialCameraPosition,
-    this.onMapCreated,
-    this.onStyleLoadedCallback,
-    this.gestureRecognizers,
-    this.compassEnabled = true,
-    this.cameraTargetBounds = CameraTargetBounds.unbounded,
-    this.styleString,
-    this.minMaxZoomPreference = MinMaxZoomPreference.unbounded,
-    this.rotateGesturesEnabled = true,
-    this.scrollGesturesEnabled = true,
-    this.zoomGesturesEnabled = true,
-    this.tiltGesturesEnabled = true,
-    this.doubleClickZoomEnabled,
-    this.dragEnabled = true,
-    this.trackCameraPosition = false,
-    this.myLocationEnabled = false,
-    this.myLocationTrackingMode = MyLocationTrackingMode.None,
-    this.myLocationRenderMode = MyLocationRenderMode.COMPASS,
-    this.logoViewMargins,
-    this.compassViewPosition,
-    this.compassViewMargins,
-    this.attributionButtonPosition = AttributionButtonPosition.BottomRight,
-    this.attributionButtonMargins,
-    this.onMapClick,
-    this.onUserLocationUpdated,
-    this.onMapLongClick,
-    this.onCameraTrackingDismissed,
-    this.onCameraTrackingChanged,
-    this.onCameraIdle,
-    this.onMapIdle,
-    this.annotationOrder = const [
-      AnnotationType.line,
-      AnnotationType.symbol,
-      AnnotationType.circle,
-      AnnotationType.fill,
-    ],
-    this.annotationConsumeTapEvents = const [
-      AnnotationType.symbol,
-      AnnotationType.fill,
-      AnnotationType.line,
-      AnnotationType.circle,
-    ],
-  })  : assert(annotationOrder.length <= 4),
+  const MaplibreMap(
+      {Key? key,
+      required this.initialCameraPosition,
+      this.onMapCreated,
+      this.onStyleLoadedCallback,
+      this.gestureRecognizers,
+      this.compassEnabled = true,
+      this.cameraTargetBounds = CameraTargetBounds.unbounded,
+      this.styleString,
+      this.minMaxZoomPreference = MinMaxZoomPreference.unbounded,
+      this.rotateGesturesEnabled = true,
+      this.scrollGesturesEnabled = true,
+      this.zoomGesturesEnabled = true,
+      this.tiltGesturesEnabled = true,
+      this.doubleClickZoomEnabled,
+      this.dragEnabled = true,
+      this.trackCameraPosition = false,
+      this.myLocationEnabled = false,
+      this.myLocationTrackingMode = MyLocationTrackingMode.None,
+      this.myLocationRenderMode = MyLocationRenderMode.COMPASS,
+      this.logoViewMargins,
+      this.compassViewPosition,
+      this.compassViewMargins,
+      this.attributionButtonPosition = AttributionButtonPosition.BottomRight,
+      this.attributionButtonMargins,
+      this.onMapClick,
+      this.onUserLocationUpdated,
+      this.onMapLongClick,
+      this.onCameraTrackingDismissed,
+      this.onCameraTrackingChanged,
+      this.onCameraIdle,
+      this.onMapIdle,
+      this.annotationOrder = const [
+        AnnotationType.line,
+        AnnotationType.symbol,
+        AnnotationType.circle,
+        AnnotationType.fill,
+      ],
+      this.annotationConsumeTapEvents = const [
+        AnnotationType.symbol,
+        AnnotationType.fill,
+        AnnotationType.line,
+        AnnotationType.circle,
+      ],
+      this.iconSizeOptions})
+      : assert(annotationOrder.length <= 4),
         assert(annotationConsumeTapEvents.length > 0),
         super(key: key);
 
@@ -211,6 +212,9 @@ class MaplibreMap extends StatefulWidget {
   /// * All fade/transition animations have completed
   final OnMapIdleCallback? onMapIdle;
 
+  /// Change icon size on changing the zoom level
+  final Map<String, dynamic>? iconSizeOptions;
+
   /// Set `MapboxMap.useHybridComposition` to `false` in order use Virtual-Display
   /// (better for Android 9 and below but may result in errors on Android 12)
   /// or leave it `true` (default) to use Hybrid composition (Slower on Android 9 and below).
@@ -299,6 +303,7 @@ class _MaplibreMapState extends State<MaplibreMap> {
       onMapIdle: widget.onMapIdle,
       annotationOrder: widget.annotationOrder,
       annotationConsumeTapEvents: widget.annotationConsumeTapEvents,
+      iconSizeOptions: widget.iconSizeOptions,
     );
     await _mapboxGlPlatform.initPlatform(id);
     _controller.complete(controller);
